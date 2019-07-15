@@ -1,9 +1,12 @@
 //https://socket.io/get-started/chat/
 const mongoose = require('mongoose');
-var app = require('express')();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+let express = require('express');
+let app = express();
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
 let bodyParser = require("body-parser");
+let moment = require('moment');
+
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -37,37 +40,27 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('user disconnecte');
     });
-});
+    socket.broadcast.emit('hi');
 
-http.listen(5080, function () {
-    console.log('listening on *:3000');
-});
+    app.use("/assets", express.static("assets"));
+    io.emit('some event', {
+        for: 'everyone'
+    });
 
-io.on('connection', function (socket) {
     socket.on('chat message', function (msg) {
         console.log('message: ' + msg);
-        const testV1mess = new Message({ message: msg });
+        const testV1mess = new Message({ date: msg.date, message: msg.message, username: user.uid });
         console.log(msg)
         testV1mess.save().then(data => {
             console.log("success", "Bravo, votre message a été envoyé")
-
+            io.emit('chat message', data);
         }).catch(err => {
+            console.log(err)
             console.log("error", "Votre message n'a pas été envoyé")
-
         })
     });
 });
 
-io.emit('some event', {
-    for: 'everyone'
-});
-io.on('connection', function (socket) {
-    socket.broadcast.emit('hi');
-
-
-});
-io.on('connection', function (socket) {
-    socket.on('chat message', function (msg) {
-        io.emit('chat message', msg);
-    });
+http.listen(5080, function () {
+    console.log('listening on *:3000');
 });

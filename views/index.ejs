@@ -67,27 +67,44 @@
 </head>
 
 <body>
+<button id="log">Login</button>
 <ul id = "test"></ul>
 <% for(messages of message) {%>
- <li><%= messages.message%> </li>
+ <li><%= messages.username%> <%= messages.message%> <%= messages.date%> </li>
 <% }%>
     <ul id="messages"></ul>
     <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="assets/firebase.js"></script>
     <script>
         $(function () {
             var socket = io();
             $('form').submit(function (e) {
                 e.preventDefault(); // prevents page reloading
-                socket.emit('chat message', $('#m').val());
+                socket.emit('chat message', {
+                    message:$('#m').val(),
+                    date:new Date().toLocaleString("fr-FR",{
+                        weekday:"long",
+                        day:"numeric",
+                        month:"long",
+                        year:"numeric",
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    })
+                });
                 $('#m').val('');
                 return false;
             });
             socket.on('chat message', function (msg) {
-                $('#messages').append($('<li>').text(msg));
+                $('#messages').append($('<li>').text(msg.username + "\n" 
+                + msg.message + "\n" + msg.date ));
             });
         });
     </script>
