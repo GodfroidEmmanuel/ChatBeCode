@@ -5,13 +5,11 @@ let app = express();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 let bodyParser = require("body-parser");
-let moment = require('moment');
-var firebase = require('firebase');
-
-
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(express.static("assets"))
+
 
 const Message = require("./models/message")
 
@@ -61,34 +59,6 @@ io.on('connection', function (socket) {
     });
 });
 
-/*const firebaseConfig = {
-    apiKey: "AIzaSyACvMRu2uILwjAa0AQzEFX2KHMqFxUUtV4",
-    authDomain: "becodechat-9f80e.firebaseapp.com",
-    databaseURL: "https://becodechat-9f80e.firebaseio.com",
-    projectId: "becodechat-9f80e",
-    storageBucket: "",
-    messagingSenderId: "659795306092",
-    appId: "1:659795306092:web:9c37d7d81ac87c9d"
-};
-firebase.initializeApp(firebaseConfig);
-
-var provider = new firebase.auth.GithubAuthProvider();
-firebase.auth().signInWithPopup(provider).then(function(result) {
-    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    // ...
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-  });*/
 http.listen(5080, function () {
     console.log('listening on *:3000');
 });
