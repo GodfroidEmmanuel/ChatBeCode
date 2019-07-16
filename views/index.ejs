@@ -39,8 +39,6 @@
 
         #messages {
             list-style-type: none;
-            margin: 0;
-            padding: 0;
         }
 
         #messages li {
@@ -50,10 +48,11 @@
         #messages li:nth-child(odd) {
             background: #eee;
         }
-         #test {
+         #test {    
             list-style-type: none;
             margin: 0;
             padding: 0;
+            padding-bottom:75px;
         }
         #test li {
             padding: 5px 10px;
@@ -68,12 +67,13 @@
 
 <body>
 <button id="log">Login</button>
-<ul id = "test"></ul>
+<ul id="test">  
 <% for(messages of message) {%>
- <li><%= messages.username%> <%= messages.message%> <%= messages.date%> </li>
+        <li><%= messages.username%> <%= messages.message%> <%= messages.date%> </li>
 <% }%>
-    <ul id="messages"></ul>
+</ul>
     <form action="">
+    <input id="pseudo" autocomplete="off" placeholder="" value="<%= messages.username%>"/>
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>

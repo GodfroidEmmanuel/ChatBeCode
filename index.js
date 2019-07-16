@@ -47,11 +47,10 @@ io.on('connection', function (socket) {
     });
 
     socket.on('chat message', function (msg) {
-        console.log('message: ' + msg);
         const testV1mess = new Message({ date: msg.date, message: msg.message, username: msg.username });
         testV1mess.save().then(data => {
             console.log("success", "Bravo, votre message a été envoyé")
-            io.emit('chat message', data);
+            io.emit('chat message', msg);
         }).catch(err => {
             console.log(err)
             console.log("error", "Votre message n'a pas été envoyé")

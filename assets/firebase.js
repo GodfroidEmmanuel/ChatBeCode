@@ -7,14 +7,18 @@ const firebaseConfig = {
   messagingSenderId: "659795306092",
   appId: "1:659795306092:web:9c37d7d81ac87c9d"
 };
+let pseud = document.getElementById("pseudo");
+let messContent = document.getElementById("m");
+
 let user = ""
 $(function () {
   var socket = io();
   $('form').submit(function (e) {
     e.preventDefault(); // prevents page reloading
+    console.log(pseud.value)
     socket.emit('chat message', {
-      username: user,
-      message: $('#m').val(),
+      username: pseud.value,
+      message: messContent.value,
       date: new Date().toLocaleString("fr-FR", {
         weekday: "long",
         day: "numeric",
@@ -28,10 +32,12 @@ $(function () {
     return false;
   });
   socket.on('chat message', function (msg) {
-    $('#messages').append($('<li>').text(msg.username + "\n"
+    $('#test').append($('<li>').text(msg.username + "\n"
       + msg.message + "\n" + msg.date));
+    console.log(msg)
   });
 });
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -44,13 +50,14 @@ function login() {
     // The signed-in user info.
     // ...
     console.log(result.additionalUserInfo.username)
-    user = result.additionalUserInfo.username;
- 
+    pseud.value = result.additionalUserInfo.username;
+
   }).catch(function (error) {
     let errorMessage = error.message;
     // The email of the user's account used.
     console.log(errorMessage);
   });
+
 
 }
 $('#log').on('click', login);
