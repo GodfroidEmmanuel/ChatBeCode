@@ -45,7 +45,7 @@ function login() {
     // ...
     console.log(result.additionalUserInfo.username)
     user = result.additionalUserInfo.username;
-
+ 
   }).catch(function (error) {
     let errorMessage = error.message;
     // The email of the user's account used.
